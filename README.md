@@ -1,4 +1,4 @@
-## <h1>Metabase business intelligence, dashboards, and data visualization tools</h1>
+## <h1>Metabase | business intelligence, dashboards, and data visualization tools</h1>
 
 
 <img src="https://vivifyassets.s3.ap-south-1.amazonaws.com/lifeeazy-logo1.png" align="right" width="250"/>
