@@ -170,7 +170,163 @@ Metabase is a powerful open-source business intelligence tool that allows you to
     
 
 
+
+
+
+# <hr>
+
+
+
+# Embedding Metabase dashboard in Application with Python using API's
+
+
+### Prerequisites:
+
+Before proceeding, ensure that you have the following dependencies installed:
+
+- Python 3.x
+
+- PyJWT library (can be installed via pip)
+
+
+
+### Installation:
+
+
+To implement JWT authentication for Metabase embedding in your Python(Django) application, follow these steps:
+
+1.Navigate to your project directory
+
+2.Run the command "pip install PyJWT" to install the necessary dependency.
+
+3.create an App and Project with these commands.
+
+
+
+For Project Creation command
+
+        django-admin startproject <project name>
+
+
+For App creation command
+
+        django-admin startapp <App name>
+
+
+4.In "Views.py" Copy this Embed Code from the metabase.
+
+<img src = "https://vivifyassets.s3.ap-south-1.amazonaws.com/Screenshot+from+2023-06-20+13-00-44.png">
+
+
+5.create a urls.py file in App and write the urls.
+
+
+6.In Project settings write the App name in "INSTALLED_APPS".
+
+7.If any doubts refer the code in "main".
+
+8.Then Run The server with this command.
+
+        python manage.py runserver
+
+9.Then open the localhost it will show like this.
+
+<img src = "https://vivifyassets.s3.ap-south-1.amazonaws.com/metabaselocalhost.png">
+
+10.open the path name which is given in the urls.
+
+11.Then it will show the link open that link it will show the dashboard.
+
+
+NOTE: This code is used for only  "One Dashboard"will be shown.
+
+
+### How to Generate Multiple Dashboards Using Swagger:
+
+
+1.If we want to generate the "multiple Dashboard Links" use this code in Views.py.
+
+
+        from rest_framework import generics
+        from rest_framework.permissions import IsAuthenticated
+        from rest_framework.response import Response
+        from genericresponse import GenericResponse
+        from django.http import JsonResponse
+        import jwt
+        import time
+
+        METABASE_SITE_URL = "<metabase url>"
+        METABASE_SECRET_KEY = "<Metabase secret key>"
+
+
+        question_list = [26,27,28,29]
+
+    class metabaseclass(generics.GenericAPIView):
+        # serializer_class = IvinSerializer
+          permission_classes = (IsAuthenticated,)
+
+
+    def get(self, request):
+        try:
+            url = []
+            # Apicall(26)
+            for i in question_list:
+                iframeUrl = Apicall(i)
+                url.append(iframeUrl)
+            
+            dic = {
+                'total voters':url[0],
+                'village voters':url[1],
+                'madugula voters by lastname':url[2],
+                'village voters by lastname':url[3],
+
+            }
+            print(dic)
+            return Response({'Message': 'Successful',
+                             'Result': dic,
+                             'HasError': False,
+                             'Status': 200})
+        except:
+            return Response({'Message': 'fail',
+                             'Result': "fail",
+                             'HasError': True,
+                             'Status': 400})
+
+
+
+     def Apicall(question_number):
+        payload = {
+                "resource": {"question": question_number},
+                "params": {},
+                # "exp": round(time.time()) + (60 * 20)  # 10 minute expiration
+        }
+   
+    token = jwt.encode(payload, METABASE_SECRET_KEY, algorithm="HS256")
     
+    iframeUrl = METABASE_SITE_URL + "/embed/question/" + token + "#bordered=true&titled=true"
+    
+    return iframeUrl
+
+2.use this code for multiple Dashboard Links.
+
+3.If we want to use this code we must Connect this to "swagger".
+
+4.For Swagger Connection Refer this Documentation [Click Here](https://drf-yasg.readthedocs.io/en/stable/readme.html)
+
+5.After Successfully Connected To swagger Their is a name with what we are give in urls.
+
+  <img src = "https://vivifyassets.s3.ap-south-1.amazonaws.com/Screenshot+from+2023-06-20+17-30-40.png">
+
+6.we can see All The End Points in that name.
+
+7.once we are open that endpoint it will show the output.
+
+## Output:
+
+ <img src = "https://vivifyassets.s3.ap-south-1.amazonaws.com/Screenshot+from+2023-06-07+16-50-08.png">
+
+
+
 
 <hr>
 
